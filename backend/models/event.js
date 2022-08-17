@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
 const EventsSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
-  startTimeUnixTimestamp: { type: String, required: true, unique: true },
-  timeZone: { type: String, required: true, unique: true },
-  duration: { type: Number, required: true, unique: true },
-  address: { type: String, required: true, unique: true },
-  descriptions: { type: String, required: true, unique: true },
-  organizationId: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  startTimeUnixTimestamp: { type: String, required: true },
+  timeZone: { type: String, required: true },
+  duration: { type: Number, required: true },
+  address: { type: String, required: true },
+  descriptions: { type: String, required: true },
+  organizationId: { type: String, required: true },
   id: String,
   createdAt: {
     type: Date,
