@@ -6,7 +6,7 @@ const EventsSchema = new mongoose.Schema({
   timeZone: { type: String, required: true },
   duration: { type: Number, required: true },
   address: { type: String, required: true },
-  descriptions: { type: String, required: true },
+  description: { type: String, required: true },
   organizationId: { type: String, required: true },
   id: String,
   createdAt: {

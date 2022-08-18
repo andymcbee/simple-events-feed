@@ -3,13 +3,14 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 
 export const signup = async (req, res) => {
+  const { subDomain, email, password, confirmPassword, orgName } = req.body;
   console.log("WORKED");
-
-  const subDomain = "test-sub22";
+  console.log(req.body);
+  /* const subDomain = "test-sub22";
   const email = "armcburn+17@gmail.com";
   const password = "123";
   const confirmPassword = "123";
-  const orgName = "Fenlon Industries";
+  const orgName = "Fenlon Industries"; */
 
   //hit this end point with:
   //email
@@ -109,5 +110,24 @@ export const setNewPassword = async (req, res) => {
 };
 
 export const getUser = async (req, res) => {
-  console.log("WORKED");
+  const { userId: _id } = req.params;
+
+  // const _id = "62fd60aa19e803d1b5ff2110";
+
+  const user = await User.findOne({ _id });
+  console.log("Existing Org::::");
+  console.log(user);
+
+  if (!user) {
+    return res.json({
+      message: "No user exists with this id.",
+      error: true,
+    });
+  }
+
+  return res.json({
+    data: { user: user },
+    message: "success",
+    error: false,
+  });
 };
