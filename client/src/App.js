@@ -9,16 +9,23 @@ import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import Navbar from "./components/Navbar";
 function App() {
+  let user = false;
   return (
     <>
       <Router>
-        <Navbar />
+        <Navbar user={user} />
         <div className="border border-indigo-500">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/new-event" element={<CreateEvent />} />
-            <Route path="/update-event/:eventId" element={<UpdateEvent />} />
-            <Route path="/subdomain-route" element={<EventFeed />} />
+            <Route path="/" element={user ? <Home /> : <Signin />} />
+            <Route
+              path="/new-event"
+              element={user ? <CreateEvent /> : <Signin />}
+            />
+            <Route
+              path="/update-event/:eventId"
+              element={user ? <UpdateEvent /> : <Signin />}
+            />
+            <Route path="/feed" element={<EventFeed />} />
             <Route path="/password-reset" element={<PasswordReset />} />
             <Route
               path="/request-password-reset"
