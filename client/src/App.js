@@ -9,14 +9,17 @@ import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import Navbar from "./components/Navbar";
 function App() {
-  let user = false;
+  let user = true;
   return (
     <>
       <Router>
         <Navbar user={user} />
-        <div className="border border-indigo-500">
+        <div className="border border-indigo-500 p-5">
           <Routes>
-            <Route path="/" element={user ? <Home /> : <Signin />} />
+            <Route
+              path="/"
+              element={user ? <Home user={user} /> : <Signin />}
+            />
             <Route
               path="/new-event"
               element={user ? <CreateEvent /> : <Signin />}
