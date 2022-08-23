@@ -1,104 +1,135 @@
 import Organization from "../models/organization.js";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const signup = async (req, res) => {
   const { subDomain, email, password, confirmPassword, orgName } = req.body;
   console.log("WORKED");
   console.log(req.body);
-  /* const subDomain = "test-sub22";
-  const email = "armcburn+17@gmail.com";
-  const password = "123";
-  const confirmPassword = "123";
-  const orgName = "Fenlon Industries"; */
 
-  //hit this end point with:
-  //email
-  //password
-  //confirmPassword
-  //subDomain
-  //orgName
+  try {
+    const existingUser = await User.findOne({ email });
+    console.log("Existing user::::");
+    console.log(existingUser);
 
-  //check and see if a user exists with email, if so - return an error.
+    if (existingUser) {
+      return res.status(400).json({
+        message: "User already exists with this email",
+        error: true,
+      });
+    }
 
-  //check and see if the slug chosen exists, if so - return an error.
+    //check for existing sub domain, return error if found
 
-  //check and see if passwords match, if not - return an error.
+    const existingOrgSubDomain = await Organization.findOne({ subDomain });
+    console.log("Existing Org Sub domain::::");
+    console.log(existingOrgSubDomain);
 
-  // If all pass, create the Organization in MongoDB
-  // be sure to return the data back so we can pass the ID through to the user
+    if (existingOrgSubDomain) {
+      return res.status(400).json({
+        message: "Sub domain already taken. Please choose a different one.",
+        error: true,
+      });
+    }
 
-  //if all pass, create the User in MongoDB
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        message: "Passwords do not match.",
+        error: true,
+      });
+    }
 
-  //worry about returning JWT later.
+    //create org
+    const organization = await Organization.create({
+      subDomain,
+      name: orgName,
+    });
 
-  ///////////////////////////////
+    console.log(organization);
 
-  //check for existing user by email, return error if found
+    // create user
 
-  const existingUser = await User.findOne({ email });
-  console.log("Existing user::::");
-  console.log(existingUser);
+    //hash password
 
-  if (existingUser) {
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const user = await User.create({
+      organizationId: organization._id.toString(),
+      email,
+      password: hashedPassword,
+    });
+
+    console.log(user);
+
+    //Create JWToken for user so we can sign them in after sign up
+    const token = jwt.sign(
+      { email: user.email, id: user._id },
+      process.env.JWTSECRET,
+      { expiresIn: "12h" }
+    );
+
     return res.json({
-      message: "User already exists with this email",
+      message: "Sign up successful!",
+      error: false,
+      token,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      message: "Error signing up user",
       error: true,
     });
   }
-
-  //check for existing sub domain, return error if found
-
-  const existingOrgSubDomain = await Organization.findOne({ subDomain });
-  console.log("Existing Org Sub domain::::");
-  console.log(existingOrgSubDomain);
-
-  if (existingOrgSubDomain) {
-    return res.json({
-      message: "Sub domain already taken. Please choose a different one.",
-      error: true,
-    });
-  }
-
-  if (password !== confirmPassword) {
-    return res.json({
-      message: "Passwords do not match.",
-      error: true,
-    });
-  }
-
-  //create org
-  const organization = await Organization.create({
-    subDomain,
-    name: orgName,
-  });
-
-  console.log(organization);
-
-  // create user
-
-  //hash password
-
-  const hashedPassword = await bcrypt.hash(password, 12);
-
-  const user = await User.create({
-    organizationId: organization._id.toString(),
-    email,
-    password: hashedPassword,
-  });
-
-  console.log(user);
-
-  return res.json({
-    message: "Sign up successful!",
-    error: false,
-  });
-
-  //Add later: return a JWT to the front end and log the user in.
 };
 
 export const signin = async (req, res) => {
-  console.log("WORKED");
+  const { email, password } = req.body;
+
+  console.log("SIGN IN WORKED");
+
+  try {
+    //attempt to find a user in the DB that matches the req.body.email
+    const existingUser = await User.findOne({ email });
+
+    //If user not found, return an error message
+    if (!existingUser)
+      return res
+        .status(404)
+        .json({ message: "User does not exist", error: true });
+
+    //check to see if password provided matches hashed password in DB
+
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+
+    //logic if password is not correct
+
+    if (!isPasswordCorrect)
+      return res
+        .status(400)
+        .json({ message: "Invalid credentials.", error: true });
+
+    //If user exists, and password is correct, get a JWT to send to front end
+
+    const token = jwt.sign(
+      { email: existingUser.email, id: existingUser._id },
+      process.env.JWTSECRET,
+      { expiresIn: "12h" }
+    );
+
+    //res.status(200).json({ result: existingUser, token });
+
+    return res.status(200).json({
+      message: "Sign in successful!",
+      error: false,
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({ error: true, message: "Error signing user in" });
+  }
 };
 
 export const resetPassword = async (req, res) => {
@@ -125,9 +156,9 @@ export const getUser = async (req, res) => {
     });
   }
 
-  return res.json({
-    data: { user: user },
-    message: "success",
+  return res.status(200).json({
+    message: "Sign up successful!",
     error: false,
+    token,
   });
 };

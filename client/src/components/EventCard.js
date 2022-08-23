@@ -7,21 +7,24 @@ import {
 } from "react-icons/io5";
 import PopupConfirmDeleteEvent from "./PopupConfirmDeleteEvent";
 import PopupEditEvent from "./PopupEditEvent";
-import PopupCreateEvent from "./PopupCreateEvent";
-function EventCard({ user, event, editEvent, deleteEvent, createEvent }) {
+function EventCard({ user, event, editEvent, deleteEvent }) {
   //console.log(event);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showEditEvent, setShowEditEvent] = useState(false);
-  const [showCreateEvent, setShowCreateEvent] = useState(false);
 
   const {
     name,
     startTimeUnixTimestamp,
+    endTimeUnixTimestamp,
+
     address,
     duration,
     description,
     organizationId,
   } = event;
+  console.log(startTimeUnixTimestamp);
+  console.log(endTimeUnixTimestamp);
+  console.log((endTimeUnixTimestamp - startTimeUnixTimestamp) / 60);
 
   const closeDeleteEventPopup = () => {
     setShowConfirmDelete(false);
@@ -39,24 +42,9 @@ function EventCard({ user, event, editEvent, deleteEvent, createEvent }) {
     setShowEditEvent(true);
   };
 
-  const closeCreateEventPopup = () => {
-    setShowCreateEvent(false);
-  };
-
-  const showCreateEventPopup = () => {
-    setShowCreateEvent(true);
-  };
-
-  //console.log(showConfirmDelete);
-  //1660231345
   const myDateTime = DateTime.fromSeconds(parseInt(startTimeUnixTimestamp));
 
   const humanReadable = myDateTime.toLocaleString(DateTime.DATETIME_MED);
-
-  // console.log(humanReadable);
-  // const myDateTimeISO = myDateTime.toISO();
-  //  console.log(myDateTimeISO);
-  <button>DELETE EVENT</button>;
 
   return (
     <>
@@ -67,13 +55,7 @@ function EventCard({ user, event, editEvent, deleteEvent, createEvent }) {
           eventData={event}
         />
       )}
-      {showCreateEvent && (
-        <PopupCreateEvent
-          closeModal={closeCreateEventPopup}
-          createEvent={createEvent}
-          organizationId={organizationId}
-        />
-      )}
+
       {showEditEvent && (
         <PopupEditEvent
           closeModal={closeEditEventPopup}
@@ -81,22 +63,22 @@ function EventCard({ user, event, editEvent, deleteEvent, createEvent }) {
           eventData={event}
         />
       )}
-      <div className="w-full flex flex-col gap-2 p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md ">
-        <div onClick={() => showCreateEventPopup()}>TEMP CREATE EVENT</div>
+      <div className="w-full flex flex-col gap-2 p-6 bg-white rounded-lg border border-gray-200 shadow-md ">
         {user && (
-          <div className="flex gap-2">
-            <div
-              className="hover:underline hover:cursor-pointer"
+          <div className="flex justify-end gap-2 border border-indigo-200">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               onClick={() => showEditEventPopup()}
             >
               Edit Event
-            </div>
-            <div
-              className="hover:underline hover:cursor-pointer"
+            </button>
+
+            <button
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               onClick={() => showDeleteEventPopup()}
             >
               Delete Event
-            </div>
+            </button>
           </div>
         )}
         <div>
@@ -122,7 +104,8 @@ function EventCard({ user, event, editEvent, deleteEvent, createEvent }) {
               <IoTimeOutline />
             </div>
             <span className="text-sm text-gray-500 ">
-              Duration: {duration} minutes
+              Duration: {(endTimeUnixTimestamp - startTimeUnixTimestamp) / 60}{" "}
+              minutes
             </span>
           </div>
         </div>

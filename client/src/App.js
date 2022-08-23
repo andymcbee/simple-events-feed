@@ -10,15 +10,16 @@ import Signup from "./views/Signup";
 import Navbar from "./components/Navbar";
 function App() {
   let user = true;
+
   return (
     <>
       <Router>
-        <Navbar user={user} />
-        <div className="border border-indigo-500 p-5">
+        {user && <Navbar user={user} />}
+        <div className="flex justify-center border border-indigo-500 p-5">
           <Routes>
             <Route
               path="/"
-              element={user ? <Home user={user} /> : <Signin />}
+              element={user ? <Home user={user} /> : <Home user={user} />}
             />
             <Route
               path="/new-event"

@@ -105,17 +105,43 @@ export const deleteEvent = async (req, res) => {
 };
 
 export const getEvents = async (req, res) => {
-  const { organizationId } = req.params;
+  const { organizationId, period } = req.params;
+  console.log(period);
 
   try {
-    const events = await Event.find({ organizationId });
+    let events;
+    //get all events
+    if (period === "all") {
+      events = await Event.find({ organizationId });
+    }
+    //get upcoming events
+    if (period === "future") {
+      events = await Event.find({
+        organizationId,
+        endTimeUnixTimestamp: { $gte: 1661268723 },
+      });
+    }
+    //get past events
 
+    if (period === "past") {
+      events = await Event.find({
+        organizationId,
+        endTimeUnixTimestamp: { $lt: 1661268723 },
+      });
+    }
     if (events.length === 0) {
       return res.json({
         message: "No events exist for organizationId",
         error: false,
       });
     }
+
+    const secondsSinceEpoch = Math.round(Date.now() / 1000);
+
+    events.sort((a, b) => {
+      return a.startTimeUnixTimestamp - b.startTimeUnixTimestamp;
+    });
+
     return res.json({
       message: "success",
       error: false,

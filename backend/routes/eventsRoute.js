@@ -11,6 +11,6 @@ const router = express.Router();
 router.post("/create", createEvent);
 router.post("/update/:eventId", updateEvent);
 router.post("/delete/:eventId", deleteEvent);
-router.get("/:organizationId", getEvents);
+router.get("/:organizationId/:period", getEvents); //period can equal: all, past or future
 
 export default router;
