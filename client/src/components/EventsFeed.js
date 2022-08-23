@@ -1,35 +1,52 @@
 import React, { useState, useEffect } from "react";
 import EventCard from "./EventCard";
 import getEvents from "../service/getEvents";
-
+import updateEvent from "../service/updateEvent";
+import deleteExistingEvent from "../service/deleteEvent";
+import createNewEvent from "../service/createEvent";
 function EventsFeed({ user }) {
   const [eventArray, setEventArray] = useState([]);
 
   const organizationId = "62fe240e050c78355542902f";
 
-  const deleteEvent = () => {
-    console.log("delete event clicked");
+  const deleteEvent = async (data) => {
+    console.log("delete event clicked23232");
+    console.log(data);
+    console.log("CREATE EVENT FIRED IN EVENTS FEED");
+    console.log(data);
+    await deleteExistingEvent(data._id);
+    const refreshedData = await getEvents(data.organizationId);
+
+    setEventArray(refreshedData);
   };
 
-  const editEvent = () => {
-    console.log("EDIT CLICKED");
+  const createEvent = async ({ data }) => {
+    console.log("CREATE EVENT FIRED IN EVENTS FEED");
+    console.log(data);
+    await createNewEvent(data);
+    const refreshedData = await getEvents(data.organizationId);
+
+    setEventArray(refreshedData);
+  };
+
+  const editEvent = async (eventData) => {
+    const { data } = eventData;
+
+    await updateEvent(data);
+    const refreshedData = await getEvents(data.organizationId);
+
+    setEventArray(refreshedData);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      //pass org ID in dynamically
       const data = await getEvents(organizationId);
-      // console.log(data);
       setEventArray(data);
     };
 
-    // call the function
-    fetchData()
-      // make sure to catch any error
-      .catch(console.error);
+    fetchData().catch(console.error);
   }, []);
-  //console.log("EVENT ARRAY:::");
-  // console.log(eventArray);
+
   return (
     <>
       <div className="border border-indigo-500 flex flex-col gap-2 items-center">
@@ -41,6 +58,7 @@ function EventsFeed({ user }) {
               editEvent={editEvent}
               deleteEvent={deleteEvent}
               user={user}
+              createEvent={createEvent}
             />
           );
         })}

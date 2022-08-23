@@ -1,5 +1,11 @@
-function PopupConfirmDeleteEvent({ closeModal, deleteEvent }) {
-  console.log(closeModal);
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
+function PopupConfirmDeleteEvent({ closeModal, deleteEvent, eventData }) {
+  console.log("WITHIN MODAL ID:::");
+  console.log(eventData);
   return (
     <>
       <div
@@ -46,7 +52,7 @@ function PopupConfirmDeleteEvent({ closeModal, deleteEvent }) {
             </div>
             <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
               <button
-                onClick={() => deleteEvent()}
+                onClick={() => deleteEvent(eventData)}
                 type="button"
                 class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >

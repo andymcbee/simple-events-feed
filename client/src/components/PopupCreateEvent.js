@@ -2,40 +2,12 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function PopupEditEvent({ closeModal, editEvent, eventData }) {
-  //initial data
-  console.log("EVENT DATA::::");
-  console.log(eventData);
-  const {
-    name: eventName,
-    startTimeUnixTimestamp,
-    endTimeUnixTimestamp,
-    address: eventAddress,
-    duration,
-    description: eventDescription,
-    _id: id,
-    organizationId,
-  } = eventData;
-
-  const [startDate, setStartDate] = useState(startTimeUnixTimestamp * 1000);
-  const [endDate, setEndDate] = useState(endTimeUnixTimestamp * 1000);
-  const [name, setName] = useState(eventName);
-  const [description, setDescription] = useState(eventDescription);
-  const [address, setAddress] = useState(eventAddress);
-
-  //console.log(eventData);
-
-  console.log(eventDescription);
-
-  // fetch relevant event
-  //populate fields
-
-  /*   console.log("START DATE::::");
-  console.log(startDate);
-  console.log("LUXON UNIX IN SECONDS:::");
-  console.log(startDate.getTime() / 1000); 
-  console.log((new Date());
-  */
+function PopupEditEvent({ closeModal, createEvent, organizationId }) {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
 
   return (
     <>
@@ -50,7 +22,7 @@ function PopupEditEvent({ closeModal, editEvent, eventData }) {
           <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <div className="flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Edit Event
+                Create Event
               </h3>
               <button
                 onClick={() => closeModal()}
@@ -159,14 +131,13 @@ function PopupEditEvent({ closeModal, editEvent, eventData }) {
                   type="submit"
                   class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   onClick={async () => {
-                    await editEvent({
+                    await createEvent({
                       data: {
                         startTimeUnix: startDate / 1000,
                         endTimeUnix: endDate / 1000,
                         name,
                         description,
                         address,
-                        id,
                         organizationId,
                       },
                     });

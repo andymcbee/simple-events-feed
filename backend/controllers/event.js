@@ -5,19 +5,19 @@ export const createEvent = async (req, res) => {
   const {
     name,
     startTimeUnixTimestamp,
-    timeZone,
-    duration,
+    endTimeUnixTimestamp,
     address,
     description,
     organizationId,
-  } = req.body;
+  } = req.body.data;
+
+  console.log(req.body);
 
   try {
     const event = await Event.create({
       name,
       startTimeUnixTimestamp,
-      timeZone,
-      duration,
+      endTimeUnixTimestamp,
       address,
       description,
       organizationId,
@@ -44,12 +44,14 @@ export const updateEvent = async (req, res) => {
   const {
     name,
     startTimeUnixTimestamp,
-    timeZone,
-    duration,
+    endTimeUnixTimestamp,
     address,
     description,
     organizationId,
-  } = req.body;
+  } = req.body.data;
+
+  console.log("WITHIN BACKEND UPDATE EVENT");
+  console.log(req.body);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ message: "No event matches ID" });
@@ -60,8 +62,7 @@ export const updateEvent = async (req, res) => {
     {
       name,
       startTimeUnixTimestamp,
-      timeZone,
-      duration,
+      endTimeUnixTimestamp,
       address,
       description,
       organizationId,
@@ -77,6 +78,8 @@ export const updateEvent = async (req, res) => {
 };
 
 export const deleteEvent = async (req, res) => {
+  console.log(req.params);
+  console.log("DELTE EVEN TFIRED");
   const id = req.params.eventId;
 
   const event = await Event.findOne({ _id: id });

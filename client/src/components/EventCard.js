@@ -7,18 +7,20 @@ import {
 } from "react-icons/io5";
 import PopupConfirmDeleteEvent from "./PopupConfirmDeleteEvent";
 import PopupEditEvent from "./PopupEditEvent";
-function EventCard({ user, event, editEvent, deleteEvent }) {
+import PopupCreateEvent from "./PopupCreateEvent";
+function EventCard({ user, event, editEvent, deleteEvent, createEvent }) {
   //console.log(event);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showEditEvent, setShowEditEvent] = useState(false);
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
 
   const {
     name,
     startTimeUnixTimestamp,
-    timeZone,
     address,
     duration,
     description,
+    organizationId,
   } = event;
 
   const closeDeleteEventPopup = () => {
@@ -37,13 +39,21 @@ function EventCard({ user, event, editEvent, deleteEvent }) {
     setShowEditEvent(true);
   };
 
-  console.log(showConfirmDelete);
+  const closeCreateEventPopup = () => {
+    setShowCreateEvent(false);
+  };
+
+  const showCreateEventPopup = () => {
+    setShowCreateEvent(true);
+  };
+
+  //console.log(showConfirmDelete);
   //1660231345
   const myDateTime = DateTime.fromSeconds(parseInt(startTimeUnixTimestamp));
 
   const humanReadable = myDateTime.toLocaleString(DateTime.DATETIME_MED);
 
-  console.log(humanReadable);
+  // console.log(humanReadable);
   // const myDateTimeISO = myDateTime.toISO();
   //  console.log(myDateTimeISO);
   <button>DELETE EVENT</button>;
@@ -54,15 +64,25 @@ function EventCard({ user, event, editEvent, deleteEvent }) {
         <PopupConfirmDeleteEvent
           closeModal={closeDeleteEventPopup}
           deleteEvent={deleteEvent}
+          eventData={event}
+        />
+      )}
+      {showCreateEvent && (
+        <PopupCreateEvent
+          closeModal={closeCreateEventPopup}
+          createEvent={createEvent}
+          organizationId={organizationId}
         />
       )}
       {showEditEvent && (
         <PopupEditEvent
           closeModal={closeEditEventPopup}
-          deleteEvent={editEvent}
+          editEvent={editEvent}
+          eventData={event}
         />
       )}
       <div className="w-full flex flex-col gap-2 p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md ">
+        <div onClick={() => showCreateEventPopup()}>TEMP CREATE EVENT</div>
         {user && (
           <div className="flex gap-2">
             <div
