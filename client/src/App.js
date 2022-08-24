@@ -21,10 +21,13 @@ function App() {
     const fetchData = async () => {
       const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
       console.log(myJwt);
-      const user = await getUser(myJwt);
-      console.log(user);
-      await setUser(user);
-      setLoading(false);
+
+      if (myJwt) {
+        const user = await getUser(myJwt);
+        console.log(user);
+        await setUser(user);
+        setLoading(false);
+      }
     };
 
     fetchData();
