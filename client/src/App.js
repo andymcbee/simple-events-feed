@@ -23,6 +23,9 @@ function App() {
       console.log(myJwt);
 
       if (myJwt) {
+        console.log(
+          "JWT IF STATEMENT FIRED.... SHOULD ONLY FIRE IF JWT IN LSTORE"
+        );
         const user = await getUser(myJwt);
         console.log(user);
         await setUser(user);
