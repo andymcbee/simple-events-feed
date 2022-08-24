@@ -5,11 +5,6 @@ let baseURL = "";
 const jwt = JSON.parse(window.localStorage.getItem("jwt"));
 console.log(jwt);
 
-/* 
-const config = {
-  headers: { Authorization: `Bearer ${jwt}` },
-}; */
-
 if (process.env.NODE_ENV === "development") {
   console.log("DEV SERVER DETECTED");
   baseURL = "http://localhost:5000";
