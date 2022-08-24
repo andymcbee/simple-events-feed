@@ -20,6 +20,8 @@ function App() {
   console.log("NODE_ENV::::::::");
   console.log(process.env.NODE_ENV);
   useEffect(() => {
+    console.log("NODE_ENV::::::::");
+    console.log(process.env.NODE_ENV);
     const fetchData = async () => {
       const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
       console.log(myJwt);
