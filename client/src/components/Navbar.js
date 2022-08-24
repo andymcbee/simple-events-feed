@@ -8,7 +8,7 @@ function Navbar({ user, handleLogout }) {
           {user ? (
             <>
               <div>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/">Dashboard</Link>
               </div>
               <div onClick={handleLogout}>Logout</div>
             </>

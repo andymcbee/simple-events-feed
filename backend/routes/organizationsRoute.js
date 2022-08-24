@@ -1,8 +1,12 @@
 import express from "express";
-import { getOrganization } from "../controllers/organization.js";
+import {
+  getOrganizationById,
+  getOrganizationBySubDomain,
+} from "../controllers/organization.js";
 
 const router = express.Router();
 
-router.get("/:organizationId", getOrganization);
+router.get("/org-id/:organizationId", getOrganizationById);
+router.get("/sub-domain/:subDomain", getOrganizationBySubDomain);
 
 export default router;

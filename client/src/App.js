@@ -15,7 +15,7 @@ import userSignup from "./service/userSignup";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +33,8 @@ function App() {
     await window.localStorage.setItem("jwt", JSON.stringify(jwt));
     const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
     const user = await getUser(myJwt);
-    setUser(user);
+    await setUser(user);
+    setLoading(false);
   };
 
   const handleSignup = async (
@@ -54,7 +55,8 @@ function App() {
     await window.localStorage.setItem("jwt", JSON.stringify(jwt));
     const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
     const user = await getUser(myJwt);
-    setUser(user);
+    await setUser(user);
+    setLoading(false);
   };
 
   const handleLogout = () => {
@@ -65,7 +67,7 @@ function App() {
   //let user = false;
 
   if (loading) {
-    return <div>Loading</div>;
+    return <div>Loading...</div>;
   }
   return (
     <>

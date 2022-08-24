@@ -5,12 +5,23 @@ import updateEvent from "../service/updateEvent";
 import deleteExistingEvent from "../service/deleteEvent";
 import createNewEvent from "../service/createEvent";
 import PopupCreateEvent from "./PopupCreateEvent";
+import getOrgBySubDomain from "../service/getOrgBySubDomain";
+import getOrgByOrgId from "../service/getOrgByOrgId";
+
 function EventsFeed({ user }) {
   const [eventArray, setEventArray] = useState([]);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [eventsPeriod, setEventsPeriod] = useState("future");
+  const [loading, setLoading] = useState(true);
+  const [organizationId, setOrganizationId] = useState("");
+  const [error, setError] = useState(false);
 
-  const organizationId = "62fe240e050c78355542902f";
+  //Add this logic into the useEffect:
+  //check and see if sub domain or not
+  //if sub domain, use the sub domain value
+  // if no sub domain, search for org with the User's orgId to find sub domain value
+  // set orgId
+  //Fetch events
 
   const handleChangePeriod = (period) => {
     setEventsPeriod(period);
@@ -49,23 +60,63 @@ function EventsFeed({ user }) {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const host = window.location.hostname;
+    console.log(host);
+    const hostArr = host.split(".");
+    console.log(hostArr);
+
+    if (hostArr.length === 2) {
+      console.log("LENGTH IS 2");
+      //find Org by Sub Domain
+      //if Org exists, set orgId state
+      //if no org exists, set error true
+
+      const fetchOrgData = async () => {
+        console.log("FETCH DATA START:::::::::::");
+        console.log(hostArr[0]);
+        const org = await getOrgBySubDomain(hostArr[0]);
+        console.log("ORG IN FETCH DATA");
+        console.log(org._id);
+        await setOrganizationId(org._id);
+        fetchEventsData(org._id, "future");
+      };
+
+      fetchOrgData();
+    }
+
+    if (hostArr.length === 1) {
+      console.log("LENGTH IS 1");
+      console.log(user.user.organizationId);
+      //get Org from User
+      //then set OrgId state
+
+      const fetchOrgData = async () => {
+        console.log("FETCH DATA START:::::::::::");
+        console.log(hostArr[0]);
+        const org = await getOrgByOrgId(user.user?.organizationId);
+        console.log("ORG IN FETCH DATA");
+        console.log(org._id);
+        await setOrganizationId(org._id);
+        fetchEventsData(org._id, "future");
+      };
+
+      fetchOrgData();
+    }
+
+    if (hostArr.length > 2) {
+      console.log("LENGTH IS NOT 1 OR 2");
+      console.log(hostArr.length);
+      setError(true);
+    }
+
+    const fetchEventsData = async (organizationId) => {
       const data = await getEvents({ organizationId, period: eventsPeriod });
-
-      /* const secondsSinceEpoch = Math.round(Date.now() / 1000);
-
-      const upComingEvents = data.filter(
-        (event) => event.endTimeUnixTimestamp > secondsSinceEpoch
-      );
-
-      console.log(upComingEvents);
-      upComingEvents.sort((a, b) => {
-        return a.startTimeUnixTimestamp - b.startTimeUnixTimestamp;
-      }); */
-      setEventArray(data);
+      console.log("FETCH EVENTS... ");
+      console.log(organizationId);
+      console.log(data);
+      await setEventArray(data);
+      setLoading(false);
     };
-
-    fetchData().catch(console.error);
   }, [eventsPeriod]);
 
   const closeCreateEventPopup = () => {
@@ -75,6 +126,13 @@ function EventsFeed({ user }) {
   const showCreateEventPopup = () => {
     setShowCreateEvent(true);
   };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error. Contact support.</div>;
+  }
 
   return (
     <>
@@ -116,7 +174,7 @@ function EventsFeed({ user }) {
               </button>
             </div>
           )}
-          {eventArray.map((x) => {
+          {eventArray?.map((x) => {
             return (
               <EventCard
                 key={x._id}

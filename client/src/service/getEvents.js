@@ -12,7 +12,7 @@ const getEvents = async ({ organizationId, period }) => {
 
     //  console.log(data.data.events);
 
-    return data.data.events;
+    return data.data?.events;
     console.log(data);
   } catch (error) {
     console.log(error);
