@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import react, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./views/Home";
 import CreateEvent from "./views/CreateEvent";
@@ -14,18 +14,24 @@ import getUser from "./service/getUser";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
+      const user = await getUser(myJwt);
+      await setUser(user);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   const handleLogin = async (email, password) => {
-    console.log("LOGIN CLICKED - inside of appjs");
-    console.log(email);
-    console.log(password);
     const jwt = await userLogin(email, password);
-    console.log(jwt);
     await window.localStorage.setItem("jwt", JSON.stringify(jwt));
     const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
-    console.log(myJwt);
     const user = await getUser(myJwt);
-    console.log(user);
     setUser(user);
   };
 
@@ -36,6 +42,9 @@ function App() {
 
   //let user = false;
 
+  if (loading) {
+    return <div>Loading</div>;
+  }
   return (
     <>
       <Router>
