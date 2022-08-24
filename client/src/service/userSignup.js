@@ -1,4 +1,4 @@
-import axios from "axios";
+import { API } from "../api";
 
 const userSignup = async (
   email,
@@ -7,36 +7,16 @@ const userSignup = async (
   orgName,
   subDomain
 ) => {
-  console.log("WITHIN SIGNUP SERVICE::::");
-  console.log("SUB DOMAIN");
-  console.log(subDomain);
-  console.log("EMAIL");
-  console.log(email);
-  console.log("PASSWORD");
-  console.log(password);
-  console.log("CONF PASSWORD");
-  console.log(confirmPassword);
-  console.log("ORG NAME");
-  console.log(orgName);
-
-  console.log("WITHIN LOGIN SERVICE:::");
-  console.log(email);
-  console.log(password);
   try {
-    const myData = await axios.post(
-      `http://localhost:5000/api/v1/users/signup`,
-      {
-        data: {
-          email,
-          password,
-          confirmPassword,
-          orgName,
-          subDomain,
-        },
-      }
-    );
-
-    //console.log(myData.data.token);
+    const myData = await API.post(`/api/v1/users/signup`, {
+      data: {
+        email,
+        password,
+        confirmPassword,
+        orgName,
+        subDomain,
+      },
+    });
 
     return myData.data.token;
   } catch (error) {

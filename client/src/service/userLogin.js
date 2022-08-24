@@ -1,19 +1,19 @@
-import axios from "axios";
+import { API } from "../api";
+//import axios from "axios";
 
 const userLogin = async (email, password) => {
-  console.log("WITHIN LOGIN SERVICE:::");
-  console.log(email);
-  console.log(password);
   try {
-    const myData = await axios.post(
-      `http://localhost:5000/api/v1/users/signin`,
-      {
-        data: {
-          email,
-          password,
-        },
-      }
-    );
+    console.log("USER LOGIN");
+    console.log(email);
+    console.log(password);
+    const myData = await API.post(`/api/v1/users/signin`, {
+      data: {
+        email,
+        password,
+      },
+    });
+
+    console.log(myData);
 
     //console.log(myData.data.token);
 

@@ -20,7 +20,9 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
+      console.log(myJwt);
       const user = await getUser(myJwt);
+      console.log(user);
       await setUser(user);
       setLoading(false);
     };

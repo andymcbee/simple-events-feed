@@ -61,22 +61,16 @@ function EventsFeed({ user }) {
 
   useEffect(() => {
     const host = window.location.hostname;
-    console.log(host);
     const hostArr = host.split(".");
-    console.log(hostArr);
 
     if (hostArr.length === 2) {
-      console.log("LENGTH IS 2");
       //find Org by Sub Domain
       //if Org exists, set orgId state
       //if no org exists, set error true
 
       const fetchOrgData = async () => {
-        console.log("FETCH DATA START:::::::::::");
-        console.log(hostArr[0]);
         const org = await getOrgBySubDomain(hostArr[0]);
-        console.log("ORG IN FETCH DATA");
-        console.log(org._id);
+
         await setOrganizationId(org._id);
         fetchEventsData(org._id, "future");
       };
@@ -85,17 +79,10 @@ function EventsFeed({ user }) {
     }
 
     if (hostArr.length === 1) {
-      console.log("LENGTH IS 1");
-      console.log(user.user.organizationId);
-      //get Org from User
-      //then set OrgId state
-
+      console.log("HOST ARR EQUALS 1");
       const fetchOrgData = async () => {
-        console.log("FETCH DATA START:::::::::::");
-        console.log(hostArr[0]);
-        const org = await getOrgByOrgId(user.user?.organizationId);
-        console.log("ORG IN FETCH DATA");
-        console.log(org._id);
+        const org = await getOrgByOrgId(user?.user?.organizationId);
+
         await setOrganizationId(org._id);
         fetchEventsData(org._id, "future");
       };
@@ -104,8 +91,6 @@ function EventsFeed({ user }) {
     }
 
     if (hostArr.length > 2) {
-      console.log("LENGTH IS NOT 1 OR 2");
-      console.log(hostArr.length);
       setError(true);
     }
 

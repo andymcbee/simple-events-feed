@@ -22,9 +22,6 @@ function EventCard({ user, event, editEvent, deleteEvent }) {
     description,
     organizationId,
   } = event;
-  console.log(startTimeUnixTimestamp);
-  console.log(endTimeUnixTimestamp);
-  console.log((endTimeUnixTimestamp - startTimeUnixTimestamp) / 60);
 
   const closeDeleteEventPopup = () => {
     setShowConfirmDelete(false);

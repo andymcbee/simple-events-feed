@@ -1,22 +1,26 @@
-import axios from "axios";
+import { API } from "../api";
 
 const createEvent = async (data) => {
-  console.log("CREATE EVENT FIRED");
-  console.log(data.organizationId);
   try {
-    const myData = await axios.post(
-      `http://localhost:5000/api/v1/events/create`,
-      {
-        data: {
-          name: data.name,
-          startTimeUnixTimestamp: data.startTimeUnix,
-          endTimeUnixTimestamp: data.endTimeUnix,
-          address: data.address,
-          description: data.description,
-          organizationId: data.organizationId,
-        },
-      }
-    );
+    /*     const jwt = JSON.parse(window.localStorage.getItem("jwt"));
+    console.log(jwt); */
+
+    /*     const config = {
+      headers: { Authorization: `Bearer ${jwt}` },
+    }; */
+
+    const myData = await API.post(`/api/v1/events/create`, {
+      data: {
+        name: data.name,
+        startTimeUnixTimestamp: data.startTimeUnix,
+        endTimeUnixTimestamp: data.endTimeUnix,
+        address: data.address,
+        description: data.description,
+        organizationId: data.organizationId,
+      },
+      /*       config,
+       */
+    });
 
     return myData.data;
   } catch (error) {

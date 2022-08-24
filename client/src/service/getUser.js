@@ -1,20 +1,14 @@
-import axios from "axios";
+import { API } from "../api";
 
 const getUser = async (jwt) => {
-  console.log("WITHIN GET USER SERVICE:::");
+  console.log("JWT::::");
   console.log(jwt);
-
-  const config = {
+  /*  const config = {
     headers: { Authorization: `Bearer ${jwt}` },
-  };
+  }; */
 
   try {
-    const data = await axios.get(
-      `http://localhost:5000/api/v1/users/me`,
-      config
-    );
-
-    console.log(data.data.result);
+    const data = await API.get(`/api/v1/users/me` /* config */);
 
     return { user: data.data.result };
   } catch (error) {
