@@ -1,3 +1,4 @@
+import react, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./views/Home";
 import CreateEvent from "./views/CreateEvent";
@@ -8,18 +9,48 @@ import RequestPasswordReset from "./views/RequestPasswordReset";
 import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import Navbar from "./components/Navbar";
+import userLogin from "./service/userLogin";
+import getUser from "./service/getUser";
+
 function App() {
-  let user = true;
+  const [user, setUser] = useState(null);
+
+  const handleLogin = async (email, password) => {
+    console.log("LOGIN CLICKED - inside of appjs");
+    console.log(email);
+    console.log(password);
+    const jwt = await userLogin(email, password);
+    console.log(jwt);
+    await window.localStorage.setItem("jwt", JSON.stringify(jwt));
+    const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
+    console.log(myJwt);
+    const user = await getUser(myJwt);
+    console.log(user);
+    setUser(user);
+  };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("jwt");
+    setUser(null);
+  };
+
+  //let user = false;
 
   return (
     <>
       <Router>
-        {user && <Navbar user={user} />}
+        {user && <Navbar user={user} handleLogout={handleLogout} />}
         <div className="flex justify-center border border-indigo-500 p-5">
           <Routes>
             <Route
               path="/"
-              element={user ? <Home user={user} /> : <Home user={user} />}
+              element={
+                user ? (
+                  <Home user={user} />
+                ) : (
+                  <Signin handleLogin={handleLogin} />
+                )
+              }
             />
             <Route
               path="/new-event"

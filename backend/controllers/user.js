@@ -84,7 +84,9 @@ export const signup = async (req, res) => {
 };
 
 export const signin = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body.data;
+
+  console.log(req.body);
 
   console.log("SIGN IN WORKED");
 
@@ -141,24 +143,43 @@ export const setNewPassword = async (req, res) => {
 };
 
 export const getUser = async (req, res) => {
-  const { userId: _id } = req.params;
+  console.log("GET USER FIRED IN BACKEND");
+  //console.log(req.headers);
+  // console.log(req.headers.authorization);
 
-  // const _id = "62fd60aa19e803d1b5ff2110";
+  try {
+    console.log("API CALL HIT");
 
-  const user = await User.findOne({ _id });
-  console.log("Existing Org::::");
-  console.log(user);
+    const token = req.headers.authorization.split(" ")[1];
 
-  if (!user) {
-    return res.json({
-      message: "No user exists with this id.",
+    // console.log(req.headers.authorization);
+
+    let decodedData = jwt.verify(token, process.env.JWTSECRET);
+
+    //console.log(decodedData);
+
+    const existingUser = await User.findOne({ _id: decodedData.id });
+    console.log("EXISTING USER::::::::");
+    console.log(existingUser);
+
+    if (!existingUser) {
+      return res
+        .status(409)
+        .json({ message: "User does not exist", error: true });
+    }
+
+    res.status(200).json({
+      result: {
+        id: existingUser._id,
+        email: existingUser.email,
+        organizationId: existingUser.organizationId,
+      },
+    });
+  } catch (error) {
+    //this should return error to client
+    return res.status(401).json({
+      message: "Error",
       error: true,
     });
   }
-
-  return res.status(200).json({
-    message: "Sign up successful!",
-    error: false,
-    token,
-  });
 };
