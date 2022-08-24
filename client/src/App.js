@@ -11,10 +11,11 @@ import Signup from "./views/Signup";
 import Navbar from "./components/Navbar";
 import userLogin from "./service/userLogin";
 import getUser from "./service/getUser";
+import userSignup from "./service/userSignup";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +30,27 @@ function App() {
 
   const handleLogin = async (email, password) => {
     const jwt = await userLogin(email, password);
+    await window.localStorage.setItem("jwt", JSON.stringify(jwt));
+    const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
+    const user = await getUser(myJwt);
+    setUser(user);
+  };
+
+  const handleSignup = async (
+    email,
+    password,
+    confirmPassword,
+    orgName,
+    subDomain
+  ) => {
+    const jwt = await userSignup(
+      email,
+      password,
+      confirmPassword,
+      orgName,
+      subDomain
+    );
+    console.log(jwt);
     await window.localStorage.setItem("jwt", JSON.stringify(jwt));
     const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
     const user = await getUser(myJwt);
@@ -63,11 +85,15 @@ function App() {
             />
             <Route
               path="/new-event"
-              element={user ? <CreateEvent /> : <Signin />}
+              element={
+                user ? <CreateEvent /> : <Signin handleLogin={handleLogin} />
+              }
             />
             <Route
               path="/update-event/:eventId"
-              element={user ? <UpdateEvent /> : <Signin />}
+              element={
+                user ? <UpdateEvent /> : <Signin handleLogin={handleLogin} />
+              }
             />
             <Route path="/feed" element={<EventFeed />} />
             <Route path="/password-reset" element={<PasswordReset />} />
@@ -75,8 +101,14 @@ function App() {
               path="/request-password-reset"
               element={<RequestPasswordReset />}
             />
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/signin"
+              element={user ? <Home /> : <Signin handleLogin={handleLogin} />}
+            />
+            <Route
+              path="/signup"
+              element={user ? <Home /> : <Signup handleSignup={handleSignup} />}
+            />
           </Routes>
         </div>
       </Router>

@@ -4,7 +4,20 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const signup = async (req, res) => {
-  const { subDomain, email, password, confirmPassword, orgName } = req.body;
+  const { subDomain, email, password, confirmPassword, orgName } =
+    req.body.data;
+  console.log("SUB DOMAIN");
+  console.log(subDomain);
+
+  console.log("EMAIL");
+  console.log(email);
+  console.log("PASSWORD");
+  console.log(password);
+  console.log("CONF PASSWORD");
+  console.log(confirmPassword);
+  console.log("ORG NAME");
+  console.log(orgName);
+
   console.log("WORKED");
   console.log(req.body);
 

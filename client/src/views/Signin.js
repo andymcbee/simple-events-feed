@@ -64,27 +64,7 @@ function Signin({ handleLogin }) {
                 onClick={async () => {
                   console.log("TEST WORKING");
 
-                  await handleLogin("armcburn+2ds3ad@gmail.com", "123");
-                  console.log(
-                    "SHOULD FIRE AFTER... THIS IS FROM THE SIGN IN VIEW."
-                  );
-
-                  /*
-
-                                userLogin("armcburn+2ds3ad@gmail.com", "123");
-                  
-                  await createEvent({
-                    data: {
-                      startTimeUnix: startDate / 1000,
-                      endTimeUnix: endDate / 1000,
-                      name,
-                      description,
-                      address,
-                      organizationId,
-                    },
-                  });
-
-                  closeModal();*/
+                  await handleLogin(email, password);
                 }}
               >
                 Submit
