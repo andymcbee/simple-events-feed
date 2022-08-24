@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 if (process.env.NODE_ENV === "production") {
-  console.log("DEV SERVER DETECTED");
+  console.log("PROD SERVER DETECTED");
   baseURL = "https://simple-events-feed-node-backen.herokuapp.com";
 }
 
