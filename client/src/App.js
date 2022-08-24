@@ -17,6 +17,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  console.log("NODE_ENV::::::::");
+  console.log(process.env.NODE_ENV);
   useEffect(() => {
     const fetchData = async () => {
       const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
@@ -29,8 +31,8 @@ function App() {
         const user = await getUser(myJwt);
         console.log(user);
         await setUser(user);
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     fetchData();
