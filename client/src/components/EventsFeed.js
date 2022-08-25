@@ -66,7 +66,7 @@ function EventsFeed({ user }) {
     console.log(host);
     const hostArr = host.split(".");
     console.log(hostArr);
-    const isVercel = hostArr[hostArr.length - 1].includes("vercel");
+    const isVercel = hostArr[hostArr.length - 2].includes("vercel");
     console.log("Vercel:::");
     console.log(isVercel);
 
