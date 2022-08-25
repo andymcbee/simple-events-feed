@@ -2,18 +2,18 @@ import { API } from "../api";
 //import axios from "axios";
 
 const userLogin = async (email, password) => {
+  console.log("USER LOGIN SERVICE:::: EMAIL AND PASSWORD");
+  console.log(email);
+  console.log(password);
   try {
-    console.log("USER LOGIN");
-    console.log(email);
-    console.log(password);
     const myData = await API.post(`/api/v1/users/signin`, {
       data: {
         email,
         password,
       },
     });
-
-    console.log(myData);
+    console.log("TOKEN RETURNED FROM SIGN IN::::");
+    console.log(myData.data.token);
 
     //console.log(myData.data.token);
 

@@ -46,10 +46,20 @@ function App() {
 
     const jwt = await userLogin(email, password);
     console.log(jwt);
+    console.log("1111111111111111111");
     await window.localStorage.setItem("jwt", JSON.stringify(jwt));
-    // const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
-    const user = await getUser(jwt);
+    console.log("22222222222222222222");
+
+    const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
+    console.log("3333333333333333333333");
+    console.log("JWT IN LOCAL STORAGE:");
+    console.log(myJwt);
+    const user = await getUser(myJwt);
+    console.log("444444444444444444444");
+
     await setUser(user);
+    console.log("555555555555555555555");
+
     setLoading(false);
   };
 

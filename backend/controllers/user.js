@@ -135,6 +135,8 @@ export const signin = async (req, res) => {
       { expiresIn: "12h" }
     );
 
+    console.log("JWT CREATED ON SERVER INSIDE SIGN UP:::::::");
+    console.log(token);
     //res.status(200).json({ result: existingUser, token });
 
     return res.status(200).json({
@@ -159,6 +161,9 @@ export const getUser = async (req, res) => {
   console.log("GET USER FIRED IN BACKEND");
   //console.log(req.headers);
   // console.log(req.headers.authorization);
+  console.log("headers:::");
+  console.log(req.headers);
+  console.log(req.headers.authorization);
 
   try {
     console.log("API CALL HIT");

@@ -24,3 +24,8 @@ export const API = axios.create({
   baseURL,
   headers: { Authorization: `Bearer ${jwt}` },
 });
+
+/* export const API = axios.create({
+  baseURL,
+  headers: { Authorization: `Bearer ${jwt}` },
+}); */
