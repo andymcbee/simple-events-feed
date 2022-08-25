@@ -63,9 +63,18 @@ function EventsFeed({ user }) {
 
   useEffect(() => {
     const host = window.location.hostname;
+    console.log(host);
     const hostArr = host.split(".");
+    console.log(hostArr);
+    const isVercel = hostArr[hostArr.length - 1].includes("vercel");
+    console.log("Vercel:::");
+    console.log(isVercel);
 
-    if (hostArr.length === 2) {
+    if (
+      (hostArr.length === 2 && !isVercel) ||
+      (hostArr.length === 3 && isVercel)
+    ) {
+      console.log("HOST ARR === 2 ~~~~~~~~~");
       //find Org by Sub Domain
       //if Org exists, set orgId state
       //if no org exists, set error true
@@ -80,8 +89,11 @@ function EventsFeed({ user }) {
       fetchOrgData();
     }
 
-    if (hostArr.length === 1) {
-      console.log("HOST ARR EQUALS 1");
+    if (
+      (hostArr.length === 1 && !isVercel) ||
+      (hostArr.length === 2 && isVercel)
+    ) {
+      console.log("HOST ARR === 1 ~~~~~~~~~");
       const fetchOrgData = async () => {
         const org = await getOrgByOrgId(user?.user?.organizationId);
 
@@ -92,7 +104,15 @@ function EventsFeed({ user }) {
       fetchOrgData();
     }
 
-    if (hostArr.length > 2) {
+    if ((hostArr.length > 2 && !isVercel) || (hostArr.length > 3 && isVercel)) {
+      console.log("HOST ARR > 2 ~~~~~~~~~");
+
+      console.log(hostArr[hostArr.length - 1]);
+
+      //let lastArrItem = hostArr[hostArr.length - 1];
+      //console.log(lastArrItem.includes("local")); // true
+      console.log(!hostArr[hostArr.length - 1].includes("local"));
+
       setError(true);
     }
 
@@ -113,12 +133,12 @@ function EventsFeed({ user }) {
   const showCreateEventPopup = () => {
     setShowCreateEvent(true);
   };
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   if (error) {
     return <div>Error. Contact support.</div>;
+  }
+  if (loading) {
+    return <div>Loading... in EVENTS FEED component</div>;
   }
 
   return (

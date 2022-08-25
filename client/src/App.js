@@ -93,7 +93,7 @@ function App() {
   //let user = false;
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...in APP component</div>;
   }
   return (
     <>
