@@ -64,9 +64,13 @@ function EventsFeed({ user }) {
   useEffect(() => {
     const host = window.location.hostname;
     console.log(host);
-    const hostArr = host.split(".");
+    let hostArr = host.split(".");
+    // if LIVE, pop last item off array (eg. get rid of .app, .com, etc.)
+    if (process.env.NODE_ENV === "production") {
+      hostArr = hostArr.pop();
+    }
     console.log(hostArr);
-    const isVercel = hostArr[hostArr.length - 2].includes("vercel");
+    // const isVercel = hostArr[hostArr.length - 2].includes("vercel");
     console.log("Vercel:::");
     console.log(isVercel);
 
