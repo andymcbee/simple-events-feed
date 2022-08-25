@@ -66,10 +66,12 @@ function EventsFeed({ user }) {
     const host = window.location.hostname;
     console.log(host);
     let hostArr = host.split(".");
+    console.log("Initial hostArr:::");
+    console.log(hostArr);
     // if LIVE, pop last item off array (eg. get rid of .app, .com, etc.)
     if (process.env.NODE_ENV === "production") {
       console.log("IF FIRED.");
-      hostArr = hostArr.pop();
+      hostArr.pop();
       console.log("Modified hostArr:::: (Without last item)");
       console.log(hostArr);
     }
