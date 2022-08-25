@@ -8,6 +8,7 @@ const auth = async (req, res, next) => {
   //body was added when hitting endpoint outside of redux or postman. Look into why.
   console.log("INSIDE MIDDLEARE");
   console.log(req.headers.authorization);
+  console.log(req.headers);
 
   try {
     const token = req.headers.authorization.split(" ")[1];
@@ -25,6 +26,7 @@ const auth = async (req, res, next) => {
     next();
   } catch (error) {
     //this should return error to client
+    console.log(error);
     return res.status(401).json({
       message: "Authorization denied. Log in to continue.",
       error: true,

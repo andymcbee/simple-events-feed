@@ -2,6 +2,9 @@ import Organization from "../models/organization.js";
 
 export const getOrganizationById = async (req, res) => {
   const { organizationId: _id } = req.params;
+  console.log("WITHIN ORG CONTROLLER... MISSING DATA?");
+
+  console.log(req.params);
 
   // const _id = "62fd60aa19e803d1b5ff2110";
 

@@ -22,6 +22,8 @@ function EventsFeed({ user }) {
   // if no sub domain, search for org with the User's orgId to find sub domain value
   // set orgId
   //Fetch events
+  console.log("EVENTS FEED ------*******************");
+  console.log(user);
 
   const handleChangePeriod = (period) => {
     setEventsPeriod(period);

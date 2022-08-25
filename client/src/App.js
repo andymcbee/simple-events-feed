@@ -41,10 +41,14 @@ function App() {
   }, []);
 
   const handleLogin = async (email, password) => {
+    console.log("sign in flow&*********");
+    console.log("JWT FROM SIGN IN API CALL ON FRONT END::::::::::");
+
     const jwt = await userLogin(email, password);
+    console.log(jwt);
     await window.localStorage.setItem("jwt", JSON.stringify(jwt));
-    const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
-    const user = await getUser(myJwt);
+    // const myJwt = JSON.parse(window.localStorage.getItem("jwt"));
+    const user = await getUser(jwt);
     await setUser(user);
     setLoading(false);
   };
@@ -117,11 +121,23 @@ function App() {
             />
             <Route
               path="/signin"
-              element={user ? <Home /> : <Signin handleLogin={handleLogin} />}
+              element={
+                user ? (
+                  <Home user={user} />
+                ) : (
+                  <Signin handleLogin={handleLogin} />
+                )
+              }
             />
             <Route
               path="/signup"
-              element={user ? <Home /> : <Signup handleSignup={handleSignup} />}
+              element={
+                user ? (
+                  <Home user={user} />
+                ) : (
+                  <Signup handleSignup={handleSignup} />
+                )
+              }
             />
           </Routes>
         </div>
